@@ -109,7 +109,7 @@ textarea{min-height:80px;resize:vertical}
         <label for="sResponse">Quote response time (shown in the quote section)</label><input id="sResponse" placeholder="We'll reply with an itemised quote within 24 hours on working days."/>
         <div class="row">
           <div><label for="sPhone">Phone (shown on site)</label><input id="sPhone"/></div>
-          <div><label for="sWhatsapp">WhatsApp number (digits only, with country code)</label><input id="sWhatsapp" placeholder="2348039350541"/></div>
+          <div><label for="sWhatsapp">WhatsApp number (digits only, with country code)</label><input id="sWhatsapp" placeholder="2348127815077"/></div>
         </div>
         <label for="sEmail">Email</label><input id="sEmail"/>
         <label for="sOffice">Office address</label><textarea id="sOffice"></textarea>
@@ -156,7 +156,7 @@ textarea{min-height:80px;resize:vertical}
               <option value="work">Our recent work (gallery)</option>
             </select>
           </div>
-          <div><label for="phCaption">Caption (shown under the photo)</label><input id="phCaption" placeholder="e.g. Sliding doors installed in Ado Ekiti"/></div>
+          <div><label for="phCaption">Caption (shown under the photo)</label><input id="phCaption" placeholder="e.g. Sliding doors installed in Benin-City Edo State"/></div>
         </div>
         <label for="phFile">Photo file(s) *</label>
         <input id="phFile" type="file" accept="image/*" multiple/>
@@ -268,10 +268,10 @@ async function loadText(){
   $('sHeroTitle').value = s.heroTitle || 'Aluminium and PVC, built for your site.';
   $('sHeroText').value = s.heroText || '';
   $('sResponse').value = s.responseText || '';
-  $('sPhone').value = s.phone || '0803 935 0541';
-  $('sWhatsapp').value = s.whatsapp || '2348039350541';
+  $('sPhone').value = s.phone || '0812 781 5077';
+  $('sWhatsapp').value = s.whatsapp || '2348127815077';
   $('sEmail').value = s.email || 'alumtiy@gmail.com';
-  $('sOffice').value = s.office || '35 Dallimore Street\nAdo Ekiti, Nigeria';
+  $('sOffice').value = s.office || '421 Upper sakponba road\nBenin City Edo State, Nigeria';
   $('sHours').value = s.hours || 'Mon–Fri: 8:00 AM to 6:00 PM\nSat: 9:00 AM to 2:00 PM\nSun: closed';
   $('vServices').checked = s.showServices !== false; $('vHow').checked = s.showHow !== false;
   $('vTerms').checked = s.showTerms !== false; $('vWork').checked = s.showWork !== false;
@@ -350,15 +350,15 @@ window.removePhoto = async id => { if(!confirm('Delete this photo?')) return; tr
 
 /* ---------- CUSTOMER MESSAGES ---------- */
 const MESSAGES = [
-  { t:'1. Quote received', b:'Dear [Name],\n\nThank you for requesting a quote from Timaya Aluminum Products for [Product]. We have received your request (reference [Ref]).\n\nWe are preparing an itemised quote and will send it to you within 24 hours on working days. If we need sizes or drawings, we will contact you.\n\nKind regards,\nTimaya Aluminum Products\n0803 935 0541' },
-  { t:'2. Quote sent', b:'Dear [Name],\n\nYour itemised quote for [Product] (reference [Ref]) is attached. The total is [Amount].\n\nThe quote is valid for 14 days. Each quote shows materials, fabrication, glass and installation separately.\n\nIf you would like to go ahead, or have any questions, reply to this message or call 0803 935 0541.\n\nKind regards,\nTimaya Aluminum Products' },
+  { t:'1. Quote received', b:'Dear [Name],\n\nThank you for requesting a quote from Timaya Aluminum Products for [Product]. We have received your request (reference [Ref]).\n\nWe are preparing an itemised quote and will send it to you within 24 hours on working days. If we need sizes or drawings, we will contact you.\n\nKind regards,\nTimaya Aluminum Products\n0812 781 5077' },
+  { t:'2. Quote sent', b:'Dear [Name],\n\nYour itemised quote for [Product] (reference [Ref]) is attached. The total is [Amount].\n\nThe quote is valid for 14 days. Each quote shows materials, fabrication, glass and installation separately.\n\nIf you would like to go ahead, or have any questions, reply to this message or call 0812 781 5077.\n\nKind regards,\nTimaya Aluminum Products' },
   { t:'3. Deposit request (half payment)', b:'Dear [Name],\n\nThank you for confirming your order (reference [Ref]).\n\nTo start production, please pay the deposit of half the total, [Amount] in this case half of your quoted amount. The balance is due before delivery.\n\nPlease send proof of payment once made, so we can start production.\n\nKind regards,\nTimaya Aluminum Products' },
   { t:'4. Full payment received (before delivery)', b:'Dear [Name],\n\nThank you. We have received your full payment for [Product] (reference [Ref]).\n\nYour order is now confirmed. We will contact you with the production and delivery dates.\n\nKind regards,\nTimaya Aluminum Products' },
   { t:'5. Production started', b:'Dear [Name],\n\nGood news. Production of your [Product] (reference [Ref]) has started.\n\nWe expect it to be ready around [Date]. We will let you know as soon as it is complete.\n\nKind regards,\nTimaya Aluminum Products' },
   { t:'6. Ready for delivery or installation', b:'Dear [Name],\n\nYour [Product] (reference [Ref]) is ready.\n\nWe have arranged delivery and installation for [Date]. Please confirm that the site is ready, and that someone will be present to receive the work.\n\nKind regards,\nTimaya Aluminum Products' },
   { t:'7. Balance reminder (before delivery)', b:'Dear [Name],\n\nA friendly reminder that the balance for your order (reference [Ref]) is due before delivery.\n\nBalance: [Amount]\n\nPlease send payment or contact us if you have a question. Thank you.\n\nKind regards,\nTimaya Aluminum Products' },
   { t:'8. Follow-up (no reply to quote)', b:'Dear [Name],\n\nWe hope you are well. We wanted to check whether you received our quote for [Product] (reference [Ref]), and whether you have any questions.\n\nWe are happy to adjust sizes or options to suit your project.\n\nKind regards,\nTimaya Aluminum Products' },
-  { t:'9. Thank you after completion', b:'Dear [Name],\n\nThank you for choosing Timaya Aluminum Products. We hope you are happy with your [Product].\n\nIf anything needs attention, please contact us on 0803 935 0541 and we will respond promptly.\n\nKind regards,\nTimaya Aluminum Products' }
+  { t:'9. Thank you after completion', b:'Dear [Name],\n\nThank you for choosing Timaya Aluminum Products. We hope you are happy with your [Product].\n\nIf anything needs attention, please contact us on 0812 781 5077 and we will respond promptly.\n\nKind regards,\nTimaya Aluminum Products' }
 ];
 function fill(text){
   return text
@@ -385,7 +385,7 @@ window.copyMsg = async i => {
 const REVIEWS = [
   { t:'Ask a customer for a Google review', b:'Dear [Name],\n\nThank you for working with Timaya Aluminum Products on your [Product]. We hope it is serving you well.\n\nIf you are happy with our work, would you share a short review on Google? It helps other builders find us. Here is the link:\n[Review link]\n\nThank you.\n\nTimaya Aluminum Products' },
   { t:'Reply to a positive review', b:'Thank you so much for your kind words, [Name]. We are glad your [Product] met your expectations.\n\nWe look forward to working with you again on your next project.\n\nTimaya Aluminum Products' },
-  { t:'Reply to a negative review', b:'Dear [Name],\n\nWe are sorry your experience did not meet your expectations. We take your feedback seriously.\n\nPlease contact us on 0803 935 0541 or at alumtiy@gmail.com so we can look into this and put it right.\n\nTimaya Aluminum Products' }
+  { t:'Reply to a negative review', b:'Dear [Name],\n\nWe are sorry your experience did not meet your expectations. We take your feedback seriously.\n\nPlease contact us on 0812 781 5077 or at alumtiy@gmail.com so we can look into this and put it right.\n\nTimaya Aluminum Products' }
 ];
 function renderReviews(){
   $('revList').innerHTML = '<div class="card"><h2>Review messages</h2><p class="lead">Use the customer name from the Customer messages tab, or type it directly. Never offer payment or a discount in return for a review.</p></div>' +
