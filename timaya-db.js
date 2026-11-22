@@ -10,7 +10,7 @@ const firebaseConfig = {
   projectId: "timaya-aluminum",
   storageBucket: "timaya-aluminum.firebasestorage.app",
   messagingSenderId: "600430707404",
-  appId: "1:600430707404:web:9324ff762857b100ab3869"
+  appId: "1:600430707404:web:9324ff762858b100ab3869"
 };
 
 export const ADMIN_EMAIL = "alumtiy@gmail.com";
