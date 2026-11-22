@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="robots" content="noindex,nofollow"/>
+<title>Admin · Timaya Aluminum</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,Arial,sans-serif;background:#F2F4F7;color:#14181F;line-height:1.5}
+header{background:#14181F;color:#fff;padding:.9rem 1.2rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+header b{font-size:1.02rem}
+header button{background:transparent;border:1px solid #fff;color:#fff;padding:.4rem .9rem;border-radius:999px;cursor:pointer;font:inherit}
+.tabs{background:#fff;border-bottom:1px solid #DDE3EA;display:flex;gap:.3rem;padding:.6rem 1rem;overflow-x:auto;position:sticky;top:0;z-index:5}
+.tabs button{background:#F2F4F7;border:0;padding:.55rem .95rem;border-radius:999px;cursor:pointer;font:inherit;font-weight:600;color:#14181F;white-space:nowrap}
+.tabs button.on{background:#14181F;color:#fff}
+main{max-width:960px;margin:0 auto;padding:1.4rem 1.1rem 3rem}
+.panel{display:none}.panel.on{display:block}
+.card{background:#fff;border-radius:16px;padding:1.3rem;margin-bottom:1.1rem;box-shadow:0 6px 18px rgba(20,24,31,.06)}
+h2{font-size:1.15rem;margin-bottom:.4rem}
+.lead{color:#5B6B7C;font-size:.92rem;margin-bottom:.9rem}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
+label{display:block;font-weight:600;font-size:.86rem;margin:.7rem 0 .25rem}
+input,textarea,select{width:100%;padding:.65rem .75rem;border:1px solid #CFD7DF;border-radius:10px;font:inherit;background:#fff}
+textarea{min-height:80px;resize:vertical}
+.btn{background:#FF7A1A;color:#fff;border:0;padding:.7rem 1.2rem;border-radius:999px;font-weight:700;cursor:pointer;font:inherit;margin-top:.9rem}
+.btn.dark{background:#14181F}
+.btn.small,.small{background:#fff;color:#14181F;border:1px solid #CFD7DF;padding:.38rem .8rem;border-radius:999px;cursor:pointer;font:inherit;font-size:.82rem}
+.item{border-top:1px solid #E5EAF0;padding:.85rem 0;display:flex;gap:.8rem;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+.item:first-child{border-top:0}
+.item .txt{flex:1;min-width:200px}
+.tag{display:inline-block;font-size:.73rem;font-weight:700;padding:.12rem .5rem;border-radius:999px;margin-left:.35rem}
+.on-t{background:#E8F7F1;color:#065F46}.off-t{background:#EEF1F4;color:#5B6B7C}
+.thumb{width:110px;height:76px;object-fit:cover;border-radius:10px;background:#EEF1F4}
+.muted{color:#5B6B7C;font-size:.88rem}
+.msg{margin-top:.6rem;font-size:.9rem}
+.msg.ok{color:#065F46}.msg.err{color:#B42318}
+.check{display:flex;gap:.6rem;align-items:flex-start;font-size:.88rem;margin-top:.7rem}
+.check input{width:auto;margin-top:.25rem}
+.tpl{border:1px solid #E5EAF0;border-radius:14px;padding:1rem;margin-bottom:.9rem}
+.tpl h3{font-size:.98rem;margin-bottom:.4rem}
+.tpl textarea{min-height:120px;background:#FAFBFC;font-size:.92rem}
+.hidden{display:none !important}
+@media(max-width:620px){.row{grid-template-columns:1fr}}
+.alert-bar{display:none;background:#FFF4E5;border-bottom:1px solid #FFD9A8;padding:.6rem 1rem;font-size:.9rem;align-items:center;justify-content:space-between;gap:.6rem;flex-wrap:wrap}
+.alert-bar.show{display:flex}
+.alert-bar button{background:#14181F;color:#fff;border:0;padding:.4rem .9rem;border-radius:999px;cursor:pointer;font:inherit;font-size:.85rem}
+</style>
+</head>
+<body>
+
+<header>
+  <b>Timaya Aluminum · Admin</b>
+  <button id="logoutBtn" class="hidden" onclick="logout()">Sign out</button>
+</header>
+
+<!-- SIGN-IN -->
+<div id="loginView" class="card" style="max-width:420px;margin:2.5rem auto">
+  <h2>Admin sign-in</h2>
+  <p class="lead">This area is private. Sign in with the admin account.</p>
+  <label for="em">Email</label><input id="em" type="email" value="alumtiy@gmail.com"/>
+  <label for="pw">Password</label><input id="pw" type="password"/>
+  <button class="btn" onclick="signIn()">Sign in</button>
+  <div id="loginErr" class="msg err hidden"></div>
+</div>
+
+<!-- ADMIN -->
+<div id="appView" class="hidden">
+  <div id="alertBar" class="alert-bar"><span id="alertText"></span><button onclick="enableAlerts()">Turn on desktop alerts</button></div>
+  <div class="tabs">
+    <button class="on" data-tab="testimonials" onclick="showTab('testimonials')">Testimonials</button>
+    <button data-tab="text" onclick="showTab('text')">Website text</button>
+    <button data-tab="sections" onclick="showTab('sections')">Sections</button>
+    <button data-tab="photos" onclick="showTab('photos')">Photos</button>
+    <button data-tab="inbox" onclick="showTab('inbox')">Inbox <span id="newBadge"></span></button>
+    <button data-tab="messages" onclick="showTab('messages')">Customer messages</button>
+    <button data-tab="reviews" onclick="showTab('reviews')">Reviews</button>
+  </div>
+
+  <main>
+    <!-- TESTIMONIALS -->
+    <section class="panel on" id="p-testimonials">
+      <div class="card">
+        <h2>Add a testimonial</h2>
+        <p class="lead">Only add a story the customer agreed to in writing. It appears on the website straight away.</p>
+        <div class="row">
+          <div><label for="tName">Customer name *</label><input id="tName"/></div>
+          <div><label for="tCompany">Company or site *</label><input id="tCompany"/></div>
+        </div>
+        <div class="row">
+          <div><label for="tProduct">Product bought</label><input id="tProduct"/></div>
+          <div><label for="tDate">Date of project</label><input id="tDate" placeholder="e.g. October 2026"/></div>
+        </div>
+        <label for="tQuote">What the customer said *</label>
+        <textarea id="tQuote" placeholder="The customer's own words, exactly as they gave them."></textarea>
+        <label class="check"><input type="checkbox" id="tConsent"/> The customer agreed in writing that we may publish this name, company and quote. *</label>
+        <button class="btn" onclick="addTest()">Add and show on website</button>
+        <div id="tMsg" class="msg"></div>
+      </div>
+      <div class="card">
+        <h2>All testimonials <span class="muted" id="tCount"></span></h2>
+        <div id="tList"><p class="muted">Loading...</p></div>
+      </div>
+    </section>
+
+    <!-- WEBSITE TEXT -->
+    <section class="panel" id="p-text">
+      <div class="card">
+        <h2>Website text and contact details</h2>
+        <p class="lead">Changes appear on the website after you save and refresh the page.</p>
+        <label for="sHeroTitle">Main headline</label><textarea id="sHeroTitle"></textarea>
+        <label for="sHeroText">Headline supporting text</label><textarea id="sHeroText"></textarea>
+        <label for="sResponse">Quote response time (shown in the quote section)</label><input id="sResponse" placeholder="We'll reply with an itemised quote within 24 hours on working days."/>
+        <div class="row">
+          <div><label for="sPhone">Phone (shown on site)</label><input id="sPhone"/></div>
+          <div><label for="sWhatsapp">WhatsApp number (digits only, with country code)</label><input id="sWhatsapp" placeholder="2348039350541"/></div>
+        </div>
+        <label for="sEmail">Email</label><input id="sEmail"/>
+        <label for="sOffice">Office address</label><textarea id="sOffice"></textarea>
+        <label for="sHours">Working hours</label><textarea id="sHours"></textarea>
+        <button class="btn" onclick="saveText()">Save website text</button>
+        <div id="sMsg" class="msg"></div>
+      </div>
+    </section>
+
+    <!-- SECTIONS -->
+    <section class="panel" id="p-sections">
+      <div class="card">
+        <h2>Show or hide sections on the website</h2>
+        <p class="lead">Untick a section to hide it from visitors. Nothing is deleted, so you can show it again later.</p>
+        <label class="check"><input type="checkbox" id="vServices"/> Our services (the six photo cards)</label>
+        <label class="check"><input type="checkbox" id="vHow"/> How it works</label>
+        <label class="check"><input type="checkbox" id="vTerms"/> Trade terms (the pale card with photo)</label>
+        <label class="check"><input type="checkbox" id="vWork"/> Our recent work (gallery)</label>
+        <label class="check"><input type="checkbox" id="vQuote"/> Request a trade quote (form)</label>
+        <label class="check"><input type="checkbox" id="vContact"/> Contact details</label>
+        <label class="check"><input type="checkbox" id="vTestimonials"/> What builders say (testimonials)</label>
+        <button class="btn" onclick="saveSections()">Save sections</button>
+        <div id="vMsg" class="msg"></div>
+        <p class="muted" style="margin-top:.8rem">The testimonials section also needs at least one story marked "Shown on website" before it appears.</p>
+      </div>
+    </section>
+
+    <!-- PHOTOS -->
+    <section class="panel" id="p-photos">
+      <div class="card">
+        <h2>Upload a photo</h2>
+        <p class="lead">Choose where the photo goes. Photos are resized automatically. Use clear, bright pictures of real work.</p>
+        <div class="row">
+          <div><label for="phSlot">Where it goes *</label>
+            <select id="phSlot">
+              <option value="hero">Top banner (large photo)</option>
+              <option value="doors">Card: Sliding doors</option>
+              <option value="windows">Card: Sliding windows</option>
+              <option value="frames">Card: Window frames</option>
+              <option value="install">Card: Installation</option>
+              <option value="roof">Card: Roofing</option>
+              <option value="security">Card: Security bars</option>
+              <option value="terms">Trade terms photo</option>
+              <option value="work">Our recent work (gallery)</option>
+            </select>
+          </div>
+          <div><label for="phCaption">Caption (shown under the photo)</label><input id="phCaption" placeholder="e.g. Sliding doors installed in Ado Ekiti"/></div>
+        </div>
+        <label for="phFile">Photo file(s) *</label>
+        <input id="phFile" type="file" accept="image/*" multiple/>
+        <button class="btn" onclick="uploadPhotos()">Upload</button>
+        <div id="phMsg" class="msg"></div>
+      </div>
+      <div class="card">
+        <h2>All photos <span class="muted" id="phCount"></span></h2>
+        <div id="phList"><p class="muted">Loading...</p></div>
+      </div>
+    </section>
+
+    <!-- INBOX -->
+    <section class="panel" id="p-inbox">
+      <div class="card">
+        <h2>Messages from the website <span class="muted" id="inCount"></span></h2>
+        <p class="lead">Quote requests and enquiries sent through the website arrive here. Reply by WhatsApp or email, then mark the message as replied.</p>
+        <div id="inList"><p class="muted">Loading...</p></div>
+      </div>
+    </section>
+
+    <!-- CUSTOMER MESSAGES -->
+    <section class="panel" id="p-messages">
+      <div class="card">
+        <h2>Customer messages</h2>
+        <p class="lead">Fill in the customer's details once, then copy any message and paste it into WhatsApp or email.</p>
+        <div class="row">
+          <div><label for="mName">Customer name</label><input id="mName" placeholder="e.g. Mr Ola"/></div>
+          <div><label for="mProduct">Product</label><input id="mProduct" placeholder="e.g. sliding doors"/></div>
+        </div>
+        <div class="row">
+          <div><label for="mRef">Quote or order reference</label><input id="mRef" placeholder="e.g. TA-0045"/></div>
+          <div><label for="mAmount">Amount (naira)</label><input id="mAmount" placeholder="e.g. 850,000"/></div>
+        </div>
+        <label for="mDate">Date (production, delivery or installation)</label><input id="mDate" placeholder="e.g. Monday 24 November"/>
+      </div>
+      <div id="msgList"></div>
+    </section>
+
+    <!-- REVIEWS -->
+    <section class="panel" id="p-reviews">
+      <div class="card">
+        <h2>Your Google review link</h2>
+        <p class="lead">Paste your review link once. It fills in automatically in every review message. To find it: open your Business Profile on Google, click <b>Get more reviews</b>, and copy the link.</p>
+        <label for="rLink">Google review link</label>
+        <input id="rLink" placeholder="https://g.page/r/..."/>
+        <button class="btn" onclick="saveReviewLink()">Save review link</button>
+        <div id="rMsg" class="msg"></div>
+      </div>
+      <div id="revList"></div>
+    </section>
+  </main>
+</div>
+
+<script type="module">
+import { adminSignIn, adminSignOut, onAdminChange, listAllTestimonies, addTestimony, setTestimonialApproved, deleteTestimony,
+         getSettings, saveSettings, listAllPhotos, addPhoto, setPhotoVisible, deletePhoto,
+         listMessages, setMessageStatus, deleteMessage, watchNewMessages, ADMIN_EMAIL } from './timaya-db.js';
+
+const $ = id => document.getElementById(id);
+const esc = v => String(v==null?'':v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const flash = (id, text, ok) => { const el = $(id); el.textContent = text; el.className = 'msg ' + (ok ? 'ok' : 'err'); };
+
+/* ---------- sign-in ---------- */
+window.signIn = async () => {
+  $('loginErr').classList.add('hidden');
+  try{ await adminSignIn($('em').value.trim(), $('pw').value); }
+  catch(e){ $('loginErr').textContent = 'Sign-in failed. Check the email and password.'; $('loginErr').classList.remove('hidden'); }
+};
+window.logout = () => adminSignOut();
+
+/* ---------- tabs ---------- */
+window.showTab = name => {
+  document.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === name));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('on', p.id === 'p-' + name));
+};
+
+/* ---------- TESTIMONIALS ---------- */
+async function loadTests(){
+  $('tList').innerHTML = '<p class="muted">Loading...</p>';
+  try{
+    const items = await listAllTestimonies();
+    $('tCount').textContent = '(' + items.length + ')';
+    $('tList').innerHTML = items.length ? items.map(t => `
+      <div class="item"><div class="txt"><b>${esc(t.name)}</b> · ${esc(t.company)}${t.product ? ' · ' + esc(t.product) : ''}
+        <span class="tag ${t.approved ? 'on-t' : 'off-t'}">${t.approved ? 'Shown on website' : 'Hidden'}</span>
+        <div class="muted" style="margin-top:.3rem">"${esc(t.quote)}"</div></div>
+        <div style="display:flex;gap:.4rem"><button class="small" onclick="toggleTest('${esc(t.id)}', ${!t.approved})">${t.approved ? 'Hide' : 'Show'}</button>
+        <button class="small" onclick="removeTest('${esc(t.id)}')">Delete</button></div></div>`).join('')
+      : '<p class="muted">No testimonials yet.</p>';
+  }catch(e){ $('tList').innerHTML = '<p class="msg err">Could not load: ' + esc(e.code || e.message) + '</p>'; }
+}
+window.addTest = async () => {
+  const v = id => $(id).value.trim();
+  if(!v('tName') || !v('tCompany') || !v('tQuote')) return flash('tMsg', 'Please fill in name, company and what the customer said.', false);
+  if(!$('tConsent').checked) return flash('tMsg', 'Please confirm the customer agreed in writing.', false);
+  try{
+    await addTestimony({ name: v('tName'), company: v('tCompany'), product: v('tProduct'), date: v('tDate'), quote: v('tQuote') });
+    ['tName','tCompany','tProduct','tDate','tQuote'].forEach(id => $(id).value = ''); $('tConsent').checked = false;
+    flash('tMsg', 'Added and shown on the website.', true); loadTests();
+  }catch(e){ flash('tMsg', 'Could not save: ' + (e.code || e.message), false); }
+};
+window.toggleTest = async (id, on) => { try{ await setTestimonialApproved(id, on); loadTests(); }catch(e){ alert(e.message); } };
+window.removeTest = async id => { if(!confirm('Delete this testimonial permanently?')) return; try{ await deleteTestimony(id); loadTests(); }catch(e){ alert(e.message); } };
+
+/* ---------- WEBSITE TEXT ---------- */
+async function loadText(){
+  const s = await getSettings();
+  $('sHeroTitle').value = s.heroTitle || 'Aluminium and PVC, built for your site.';
+  $('sHeroText').value = s.heroText || '';
+  $('sResponse').value = s.responseText || '';
+  $('sPhone').value = s.phone || '0803 935 0541';
+  $('sWhatsapp').value = s.whatsapp || '2348039350541';
+  $('sEmail').value = s.email || 'alumtiy@gmail.com';
+  $('sOffice').value = s.office || '35 Dallimore Street\nAdo Ekiti, Nigeria';
+  $('sHours').value = s.hours || 'Mon–Fri: 8:00 AM to 6:00 PM\nSat: 9:00 AM to 2:00 PM\nSun: closed';
+  $('vServices').checked = s.showServices !== false; $('vHow').checked = s.showHow !== false;
+  $('vTerms').checked = s.showTerms !== false; $('vWork').checked = s.showWork !== false;
+  $('vQuote').checked = s.showQuote !== false; $('vContact').checked = s.showContact !== false;
+  $('vTestimonials').checked = s.showTestimonials !== false;
+  $('rLink').value = s.reviewLink || '';
+  renderReviews();
+}
+window.saveText = async () => {
+  try{
+    await saveSettings({ heroTitle: $('sHeroTitle').value.trim(), heroText: $('sHeroText').value.trim(),
+      responseText: $('sResponse').value.trim(), phone: $('sPhone').value.trim(), whatsapp: $('sWhatsapp').value.replace(/\D/g,''),
+      email: $('sEmail').value.trim(), office: $('sOffice').value.trim(), hours: $('sHours').value.trim() });
+    flash('sMsg', 'Saved. Refresh the website to see the changes.', true);
+  }catch(e){ flash('sMsg', 'Could not save: ' + (e.code || e.message), false); }
+};
+window.saveReviewLink = async () => {
+  try{ await saveSettings({ reviewLink: $('rLink').value.trim() }); flash('rMsg', 'Saved. Every review message now uses this link.', true); renderReviews(); }
+  catch(e){ flash('rMsg', 'Could not save: ' + (e.code || e.message), false); }
+};
+window.saveSections = async () => {
+  try{
+    await saveSettings({ showServices: $('vServices').checked, showHow: $('vHow').checked, showTerms: $('vTerms').checked,
+      showWork: $('vWork').checked, showQuote: $('vQuote').checked, showContact: $('vContact').checked, showTestimonials: $('vTestimonials').checked });
+    flash('vMsg', 'Saved. Refresh the website to see the changes.', true);
+  }catch(e){ flash('vMsg', 'Could not save: ' + (e.code || e.message), false); }
+};
+
+/* ---------- PHOTOS ---------- */
+async function shrink(file){
+  const url = URL.createObjectURL(file);
+  const img = new Image(); img.src = url; await img.decode();
+  let max = 1100, quality = 0.8, out = '';
+  for(let attempt = 0; attempt < 4; attempt++){
+    const r = Math.min(1, max / Math.max(img.width, img.height));
+    const c = document.createElement('canvas'); c.width = Math.round(img.width * r); c.height = Math.round(img.height * r);
+    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+    out = c.toDataURL('image/jpeg', quality);
+    if(out.length < 900000) break;
+    max = Math.round(max * 0.8); quality = Math.max(0.5, quality - 0.1);
+  }
+  URL.revokeObjectURL(url);
+  return out;
+}
+window.uploadPhotos = async () => {
+  const files = Array.from($('phFile').files || []);
+  if(!files.length) return flash('phMsg', 'Please choose at least one photo.', false);
+  flash('phMsg', 'Uploading ' + files.length + ' photo(s)...', true);
+  try{
+    for(const f of files){
+      const dataUrl = await shrink(f);
+      if(dataUrl.length >= 900000) throw new Error('"' + f.name + '" is too large even after resizing.');
+      await addPhoto({ slot: $('phSlot').value, caption: $('phCaption').value.trim() || f.name.replace(/\.[^.]+$/, ''), dataUrl, visible: true, order: Date.now() });
+    }
+    $('phFile').value = ''; $('phCaption').value = '';
+    flash('phMsg', 'Uploaded. Refresh the website to see the photo.', true);
+    loadPhotos();
+  }catch(e){ flash('phMsg', 'Upload failed: ' + (e.message || e.code), false); }
+};
+async function loadPhotos(){
+  $('phList').innerHTML = '<p class="muted">Loading...</p>';
+  try{
+    const list = await listAllPhotos();
+    $('phCount').textContent = '(' + list.length + ')';
+    $('phList').innerHTML = list.length ? list.map(p => `
+      <div class="item"><img class="thumb" src="${p.dataUrl}" alt=""/>
+        <div class="txt"><b>${esc(p.caption)}</b><div class="muted">Place: ${esc(p.slot)}</div>
+          <span class="tag ${p.visible ? 'on-t' : 'off-t'}">${p.visible ? 'Shown on website' : 'Hidden'}</span></div>
+        <div style="display:flex;gap:.4rem"><button class="small" onclick="togglePhoto('${esc(p.id)}', ${!p.visible})">${p.visible ? 'Hide' : 'Show'}</button>
+        <button class="small" onclick="removePhoto('${esc(p.id)}')">Delete</button></div></div>`).join('')
+      : '<p class="muted">No photos uploaded yet. The website keeps its built-in photos until you add one.</p>';
+  }catch(e){ $('phList').innerHTML = '<p class="msg err">Could not load: ' + esc(e.code || e.message) + '</p>'; }
+}
+window.togglePhoto = async (id, on) => { try{ await setPhotoVisible(id, on); loadPhotos(); }catch(e){ alert(e.message); } };
+window.removePhoto = async id => { if(!confirm('Delete this photo?')) return; try{ await deletePhoto(id); loadPhotos(); }catch(e){ alert(e.message); } };
+
+/* ---------- CUSTOMER MESSAGES ---------- */
+const MESSAGES = [
+  { t:'1. Quote received', b:'Dear [Name],\n\nThank you for requesting a quote from Timaya Aluminum Products for [Product]. We have received your request (reference [Ref]).\n\nWe are preparing an itemised quote and will send it to you within 24 hours on working days. If we need sizes or drawings, we will contact you.\n\nKind regards,\nTimaya Aluminum Products\n0803 935 0541' },
+  { t:'2. Quote sent', b:'Dear [Name],\n\nYour itemised quote for [Product] (reference [Ref]) is attached. The total is [Amount].\n\nThe quote is valid for 14 days. Each quote shows materials, fabrication, glass and installation separately.\n\nIf you would like to go ahead, or have any questions, reply to this message or call 0803 935 0541.\n\nKind regards,\nTimaya Aluminum Products' },
+  { t:'3. Deposit request (half payment)', b:'Dear [Name],\n\nThank you for confirming your order (reference [Ref]).\n\nTo start production, please pay the deposit of half the total, [Amount] in this case half of your quoted amount. The balance is due before delivery.\n\nPlease send proof of payment once made, so we can start production.\n\nKind regards,\nTimaya Aluminum Products' },
+  { t:'4. Full payment received (before delivery)', b:'Dear [Name],\n\nThank you. We have received your full payment for [Product] (reference [Ref]).\n\nYour order is now confirmed. We will contact you with the production and delivery dates.\n\nKind regards,\nTimaya Aluminum Products' },
+  { t:'5. Production started', b:'Dear [Name],\n\nGood news. Production of your [Product] (reference [Ref]) has started.\n\nWe expect it to be ready around [Date]. We will let you know as soon as it is complete.\n\nKind regards,\nTimaya Aluminum Products' },
+  { t:'6. Ready for delivery or installation', b:'Dear [Name],\n\nYour [Product] (reference [Ref]) is ready.\n\nWe have arranged delivery and installation for [Date]. Please confirm that the site is ready, and that someone will be present to receive the work.\n\nKind regards,\nTimaya Aluminum Products' },
+  { t:'7. Balance reminder (before delivery)', b:'Dear [Name],\n\nA friendly reminder that the balance for your order (reference [Ref]) is due before delivery.\n\nBalance: [Amount]\n\nPlease send payment or contact us if you have a question. Thank you.\n\nKind regards,\nTimaya Aluminum Products' },
+  { t:'8. Follow-up (no reply to quote)', b:'Dear [Name],\n\nWe hope you are well. We wanted to check whether you received our quote for [Product] (reference [Ref]), and whether you have any questions.\n\nWe are happy to adjust sizes or options to suit your project.\n\nKind regards,\nTimaya Aluminum Products' },
+  { t:'9. Thank you after completion', b:'Dear [Name],\n\nThank you for choosing Timaya Aluminum Products. We hope you are happy with your [Product].\n\nIf anything needs attention, please contact us on 0803 935 0541 and we will respond promptly.\n\nKind regards,\nTimaya Aluminum Products' }
+];
+function fill(text){
+  return text
+    .replace(/\[Name\]/g, $('mName').value.trim() || '[Name]')
+    .replace(/\[Product\]/g, $('mProduct').value.trim() || '[Product]')
+    .replace(/\[Ref\]/g, $('mRef').value.trim() || '[Ref]')
+    .replace(/\[Amount\]/g, $('mAmount').value.trim() || '[Amount]')
+    .replace(/\[Date\]/g, $('mDate').value.trim() || '[Date]');
+}
+function renderMessages(){
+  $('msgList').innerHTML = MESSAGES.map((m, i) => `
+    <div class="tpl"><h3>${esc(m.t)}</h3>
+      <textarea id="msg${i}" readonly>${esc(fill(m.b))}</textarea>
+      <button class="btn dark" onclick="copyMsg(${i})">Copy message</button></div>`).join('');
+}
+window.copyMsg = async i => {
+  const ta = $('msg' + i);
+  try{ await navigator.clipboard.writeText(ta.value); alert('Copied. Paste it into WhatsApp or email.'); }
+  catch(e){ ta.select(); alert('Press Ctrl+C to copy.'); }
+};
+['mName','mProduct','mRef','mAmount','mDate'].forEach(id => $(id).addEventListener('input', () => { renderMessages(); renderReviews(); }));
+
+/* ---------- REVIEWS ---------- */
+const REVIEWS = [
+  { t:'Ask a customer for a Google review', b:'Dear [Name],\n\nThank you for working with Timaya Aluminum Products on your [Product]. We hope it is serving you well.\n\nIf you are happy with our work, would you share a short review on Google? It helps other builders find us. Here is the link:\n[Review link]\n\nThank you.\n\nTimaya Aluminum Products' },
+  { t:'Reply to a positive review', b:'Thank you so much for your kind words, [Name]. We are glad your [Product] met your expectations.\n\nWe look forward to working with you again on your next project.\n\nTimaya Aluminum Products' },
+  { t:'Reply to a negative review', b:'Dear [Name],\n\nWe are sorry your experience did not meet your expectations. We take your feedback seriously.\n\nPlease contact us on 0803 935 0541 or at alumtiy@gmail.com so we can look into this and put it right.\n\nTimaya Aluminum Products' }
+];
+function renderReviews(){
+  $('revList').innerHTML = '<div class="card"><h2>Review messages</h2><p class="lead">Use the customer name from the Customer messages tab, or type it directly. Never offer payment or a discount in return for a review.</p></div>' +
+    REVIEWS.map((m, i) => `
+    <div class="tpl"><h3>${esc(m.t)}</h3>
+      <textarea id="rev${i}" readonly>${esc(m.b.replace(/\[Name\]/g, $('mName').value.trim() || '[Name]').replace(/\[Product\]/g, $('mProduct').value.trim() || '[Product]').replace(/\[Review link\]/g, $('rLink').value.trim() || '[Paste your review link above]'))}</textarea>
+      <button class="btn dark" onclick="copyRev(${i})">Copy message</button></div>`).join('');
+}
+window.copyRev = async i => {
+  const ta = $('rev' + i);
+  try{ await navigator.clipboard.writeText(ta.value); alert('Copied.'); }
+  catch(e){ ta.select(); alert('Press Ctrl+C to copy.'); }
+};
+
+
+/* ---------- INBOX ---------- */
+async function loadInbox(){
+  $('inList').innerHTML = '<p class="muted">Loading...</p>';
+  try{
+    const list = await listMessages();
+    const news = list.filter(m => m.status === 'New').length;
+    $('newBadge').textContent = news ? '(' + news + ' new)' : '';
+    $('inCount').textContent = '(' + list.length + ')';
+    $('inList').innerHTML = list.length ? list.map(m => {
+      const when = m.createdAt && m.createdAt.toDate ? m.createdAt.toDate().toLocaleString('en-GB') : '';
+      const wa = 'https://wa.me/' + String(m.phone || '').replace(/\D/g,'');
+      const tplOpts = MESSAGES.map((t, i) => '<option value="' + i + '">' + esc(t.t) + '</option>').join('');
+      return `
+      <div class="item" style="display:block">
+        <div style="display:flex;justify-content:space-between;gap:.5rem;flex-wrap:wrap">
+          <div><b>${esc(m.name)}</b> · ${esc(m.phone)}${m.email ? ' · ' + esc(m.email) : ''}
+            <span class="tag ${m.status === 'New' ? 'on-t' : 'off-t'}">${esc(m.status)}</span>
+            <span class="tag off-t">${m.type === 'quote' ? 'Quote request' : 'Enquiry'}</span></div>
+          <div class="muted">${esc(when)}</div>
+        </div>
+        ${m.company || m.product ? '<div class="muted" style="margin-top:.3rem">' + (m.company ? esc(m.company) : '') + (m.product ? ' · ' + esc(m.product) : '') + '</div>' : ''}
+        <div style="margin:.5rem 0;white-space:pre-wrap;background:#FAFBFC;border-radius:10px;padding:.7rem">${esc(m.message)}</div>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center">
+          <select id="tp-${esc(m.id)}" style="width:auto">${tplOpts}</select>
+          <button class="small" onclick="replyWA('${esc(m.id)}')">Reply on WhatsApp</button>
+          ${m.email ? `<button class="small" onclick="replyEmail('${esc(m.id)}')">Reply by email</button>` : ''}
+          <button class="small" onclick="setMsgStatus('${esc(m.id)}', '${m.status === 'New' ? 'Replied' : 'New'}')">${m.status === 'New' ? 'Mark replied' : 'Mark as new'}</button>
+          <button class="small" onclick="removeMsg('${esc(m.id)}')">Delete</button>
+        </div>
+        <input type="hidden" id="wa-${esc(m.id)}" value="${esc(wa)}"/>
+      </div>`;
+    }).join('') : '<p class="muted">No messages yet. They appear here when someone uses the website.</p>';
+    window._inbox = list;
+  }catch(e){ $('inList').innerHTML = '<p class="msg err">Could not load messages: ' + esc(e.code || e.message) + '</p>'; }
+}
+function filledFor(m, idx){
+  const t = MESSAGES[idx] || MESSAGES[0];
+  return t.b.replace(/\[Name\]/g, m.name || '[Name]').replace(/\[Product\]/g, m.product || '[Product]')
+            .replace(/\[Ref\]/g, '[Ref]').replace(/\[Amount\]/g, '[Amount]').replace(/\[Date\]/g, '[Date]');
+}
+window.replyWA = m => {
+  const m2 = (window._inbox || []).find(x => x.id === m);
+  if(!m2) return;
+  const idx = $('tp-' + m).value;
+  const text = filledFor(m2, idx);
+  navigator.clipboard && navigator.clipboard.writeText(text).catch(() => {});
+  const phone = String(m2.phone || '').replace(/\D/g,'');
+  window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(text), '_blank');
+  alert('The message is also copied. Press send in WhatsApp.');
+};
+window.replyEmail = m => {
+  const m2 = (window._inbox || []).find(x => x.id === m);
+  if(!m2 || !m2.email) return;
+  const idx = $('tp-' + m).value;
+  const t = MESSAGES[idx] || MESSAGES[0];
+  window.location.href = 'mailto:' + m2.email + '?subject=' + encodeURIComponent('Re: ' + t.t.replace(/^\d+\.\s*/, '')) + '&body=' + encodeURIComponent(filledFor(m2, idx));
+};
+window.setMsgStatus = async (id, status) => { try{ await setMessageStatus(id, status); loadInbox(); }catch(e){ alert(e.message); } };
+window.removeMsg = async id => { if(!confirm('Delete this message permanently?')) return; try{ await deleteMessage(id); loadInbox(); }catch(e){ alert(e.message); } };
+
+
+/* ---------- NEW MESSAGE ALERTS ---------- */
+let knownNew = null;
+let watchStarted = false;
+function beep(){
+  try{
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination); o.frequency.value = 880; g.gain.value = 0.15;
+    o.start(); setTimeout(() => { o.frequency.value = 660; }, 160); setTimeout(() => { o.stop(); ctx.close(); }, 320);
+  }catch(e){}
+}
+window.enableAlerts = async () => {
+  if(!('Notification' in window)) return alert('This browser does not support alerts.');
+  const r = await Notification.requestPermission();
+  if(r === 'granted') { $('alertBar').classList.remove('show'); alert('Alerts are on. You will be notified when a new message arrives while this page is open.'); }
+  else alert('Alerts were not allowed. You will still see the new-message bar on this page.');
+};
+function startAlerts(){
+  if(watchStarted) return; watchStarted = true;
+  if('Notification' in window && Notification.permission === 'default') $('alertBar').classList.add('show'), $('alertText').textContent = 'Turn on alerts to be told the moment a customer writes.';
+  watchNewMessages(list => {
+    const count = list.length;
+    document.title = (count ? '(' + count + ') ' : '') + 'Admin · Timaya Aluminum';
+    const badge = $('newBadge'); if(badge) badge.textContent = count ? '(' + count + ' new)' : '';
+    if(knownNew !== null && count > knownNew){
+      const latest = list[0] || {};
+      beep();
+      if('Notification' in window && Notification.permission === 'granted'){
+        new Notification('New message on Timaya Aluminum', { body: (latest.name || 'A customer') + ': ' + String(latest.message || '').slice(0, 120) });
+      }
+      loadInbox();
+    }
+    knownNew = count;
+  }, () => {});
+}
+
+/* ---------- start ---------- */
+onAdminChange(async user => {
+  const ok = !!user && user.email === ADMIN_EMAIL;
+  $('loginView').classList.toggle('hidden', ok);
+  $('appView').classList.toggle('hidden', !ok);
+  $('logoutBtn').classList.toggle('hidden', !ok);
+  if(ok){
+    loadTests(); loadPhotos(); renderMessages(); renderReviews(); loadInbox(); startAlerts();
+    try{ await loadText(); }catch(e){}
+  }
+});
+</script>
+</body>
+</html>
